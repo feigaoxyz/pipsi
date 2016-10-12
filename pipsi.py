@@ -149,10 +149,6 @@ class UninstallInfo(object):
                 shutil.rmtree(path)
 
 
-
-
-
-
 class Repo(object):
 
     def __init__(self, home, bin_dir):
@@ -230,7 +226,18 @@ class Repo(object):
             return False
 
         # Install virtualenv, use the pipsi used python version by default
-        args = ['virtualenv', '-p', python or sys.executable, venv_path]
+        # args = ['virtualenv', '-p', python or sys.executable, venv_path]
+        conda_bin = os.getenv('CONDA_HOME', None)
+        if conda_bin is None:
+            conda_bin = 'conda'  # first conda in system paths
+        else:
+            conda_bin = os.path.join(
+                os.path.abspath(conda_bin), 'bin', 'conda')
+        args = [conda_bin, 'create',
+                '-p', venv_path,  # prefix for conda env
+                '--no-default-packages',  # ignore .condarc
+                'pip'  # install pip inside conda env
+                ]
 
         if system_site_packages:
             args.append('--system-site-packages')
@@ -318,7 +325,7 @@ class Repo(object):
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.option(
-    '--home', type=click.Path(),envvar='PIPSI_HOME',
+    '--home', type=click.Path(), envvar='PIPSI_HOME',
     default=os.path.expanduser('~/.local/venvs'),
     help='The folder that contains the virtualenvs.')
 @click.option(
@@ -326,7 +333,6 @@ class Repo(object):
     envvar='PIPSI_BIN_DIR',
     default=os.path.expanduser('~/.local/bin'),
     help='The path where the scripts are symlinked to.')
-
 @click.version_option(
     message='%(prog)s, version %(version)s, python ' + str(sys.executable))
 @click.pass_context
@@ -359,7 +365,6 @@ def install(repo, package, python, editable, system_site_packages):
         click.echo('Done.')
     else:
         sys.exit(1)
-
 
 
 @cli.command()

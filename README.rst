@@ -1,6 +1,24 @@
 pipsi
 =====
 
+This is a fork of `mitsuhiko/pipsi`_.
+
+.. _`mitsuhiko/pipsi`: https://github.com/mitsuhiko/pipsi
+
+The change has been made for my use of `conda` instead of `virtualenv`.
+
+Boostrapping and Installation::
+
+      cd $HOME
+      conda create -p ~/.local/venvs/pipsi --no-default-packages pip
+      ./.local/venvs/pipsi/bin/pip install git+https://www.github.com/feigaoxyz/pipsi.git
+      ln -s ~/.local/venvs/pipsi/bin/pipsi ~/.local/bin/pipsi
+
+
+You can read the original README below for usage.
+
+---------------------
+
 pipsi = pip script installer
 
 What does it do?  pipsi is a wrapper around virtualenv and pip

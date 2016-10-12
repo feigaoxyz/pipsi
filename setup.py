@@ -15,7 +15,7 @@ setup(
     py_modules=['pipsi'],
     install_requires=[
         'Click',
-        'virtualenv',
+        # 'virtualenv',
     ],
     entry_points='''
     [console_scripts]
